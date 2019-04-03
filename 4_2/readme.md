@@ -1,3 +1,3 @@
 ## gcc
 ## gdb
-## mike/Mikefile
+## make/Makefile
