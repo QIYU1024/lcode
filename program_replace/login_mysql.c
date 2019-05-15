@@ -12,7 +12,8 @@ int main()
 	}
 	else
 	{
-		wait(NULL);
+		//wait(NULL);
+		waitpid(pid, NULL, 0);
 		printf("root log in mysql...\n");
 		execlp("mysql", "mysql", "-u", "root", "-p", NULL);
 	}
