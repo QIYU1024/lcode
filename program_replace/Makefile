@@ -1,6 +1,6 @@
-prog_replace:prog_replace.c
-	gcc -o $@ $^
+mini_shell:mini_shell.cc
+	g++ -o $@ $^
 
 .PHONY:clean
 clean:
-	rm -f prog_replace
+	rm -f mini_shell
