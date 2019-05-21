@@ -22,6 +22,7 @@ void strtoargv(char *str, char **argv)
 		argv[i] = strtok(NULL, " ");
 	}
 }
+
 int main()
 {
 	string prompt = "[qiyu@mini_shell xxx]# ";
@@ -31,34 +32,64 @@ int main()
 		char command[MAXNUM];
 		fgets(command, MAXNUM, stdin);
 		command[strlen(command)-1] = 0; //delete '\n'
-		char *argv[MAXNO];
-		strtoargv(command, argv);
-		int i = 0;
-		char *file = NULL;
-		for (; argv[i] != NULL; ++i)
+		//处理 >, >>, <
+		string cmd = command;
+		string symbol;
+		int index;
+		if((index = cmd.find('>')) != string::npos)
 		{
-			if(0 == strcmp(">", argv[i]))
+			symbol += '>';
+			if(cmd[index+1] == '>')
 			{
-				argv[i] = NULL;
-				if(argv[i+1] != NULL)
-					file = argv[i+1];
+				symbol += '>';
+				++index;
 			}
 		}
-		pid_t pid = fork();
-		if(pid == 0)
+		else if((index = cmd.find('<')) != string::npos)
 		{
-			if(file != NULL)
+			symbol += '<';
+		}
+		char file[32];
+		if(!symbol.empty())	
+		{
+			string str(cmd, 0, index); //> 之前
+			++index; //跳过>
+			while(cmd[index] == ' ') { ++index; } //跳过空格
+			string temp(cmd, index); //重定向到
+			if(symbol == "<")
 			{
-				open(file, O_WRONLY|O_CREAT, 00644);
-				dup2(3, 1);
+				swap(str, temp);
+				if(temp[temp.size()-1] == ' ')
+					temp.resize(temp.size()-1);
 			}
-			execvp(argv[0], argv);
+			strcpy(command, str.c_str());
+			strcpy(file, temp.c_str());
 		}
-		else
-		{
-			int status;
-			waitpid(pid, &status, 0);
-		}
+		//对>>的处理有问题
+		cout << command << "." << symbol << "."<< file << "." << endl;
+		//char *argv[MAXNO];
+		//strtoargv(command, argv);
+		//pid_t pid = fork();
+		//if(pid == 0)
+		//{
+		//	if(!symbol.empty())
+		//	{
+		//		int fd;
+		//		if(symbol == ">" || symbol == "<")
+		//			fd = open(file, O_WRONLY|O_CREAT, 00644);
+		//		else if(symbol == ">>")
+		//			fd = open(file, O_CREAT|O_WRONLY|O_APPEND, 00644);
+		//		if(symbol == "<")
+		//			dup2(3, 0);
+		//		dup2(fd, 1);
+		//	}
+		//	execvp(argv[0], argv);
+		//}
+		//else
+		//{
+		//	int status;
+		//	waitpid(pid, &status, 0);
+		//}
 	}
 	//argv[i-1] = NULL;
 	//for (i = 0; argv[i] != NULL; ++i)
