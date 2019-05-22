@@ -30,66 +30,74 @@ int main()
 	{
 		cout << prompt;
 		char command[MAXNUM];
+		memset(command, 0, MAXNUM);
 		fgets(command, MAXNUM, stdin);
 		command[strlen(command)-1] = 0; //delete '\n'
 		//处理 >, >>, <
 		string cmd = command;
 		string symbol;
 		int index;
+		int flag;
 		if((index = cmd.find('>')) != string::npos)
 		{
+			flag = index;
 			symbol += '>';
 			if(cmd[index+1] == '>')
-			{
 				symbol += '>';
-				++index;
-			}
 		}
 		else if((index = cmd.find('<')) != string::npos)
 		{
+			flag = index;
 			symbol += '<';
 		}
-		char file[32];
+		char file[MAXNO];
+		memset(file, 0, MAXNO);
 		if(!symbol.empty())	
 		{
-			string str(cmd, 0, index); //> 之前
-			++index; //跳过>
-			while(cmd[index] == ' ') { ++index; } //跳过空格
+			string str(cmd, 0, flag); //> 之前
+			while(cmd[index] == ' ' || cmd[index] == '>' || cmd[index] == '<') { ++index; } //跳过
 			string temp(cmd, index); //重定向到
-			if(symbol == "<")
-			{
-				swap(str, temp);
-				if(temp[temp.size()-1] == ' ')
-					temp.resize(temp.size()-1);
-			}
+			//if(symbol == "<")
+			//{
+			//	swap(str, temp);
+			//	if(temp[temp.size()-1] == ' ')
+			//		temp.resize(temp.size()-1);
+			//}
 			strcpy(command, str.c_str());
 			strcpy(file, temp.c_str());
 		}
-		//对>>的处理有问题
-		cout << command << "." << symbol << "."<< file << "." << endl;
-		//char *argv[MAXNO];
-		//strtoargv(command, argv);
-		//pid_t pid = fork();
-		//if(pid == 0)
-		//{
-		//	if(!symbol.empty())
-		//	{
-		//		int fd;
-		//		if(symbol == ">" || symbol == "<")
-		//			fd = open(file, O_WRONLY|O_CREAT, 00644);
-		//		else if(symbol == ">>")
-		//			fd = open(file, O_CREAT|O_WRONLY|O_APPEND, 00644);
-		//		if(symbol == "<")
-		//			dup2(3, 0);
-		//		dup2(fd, 1);
-		//	}
-		//	execvp(argv[0], argv);
-		//}
-		//else
-		//{
-		//	int status;
-		//	waitpid(pid, &status, 0);
-		//}
+		//cout << command << "." << symbol << "."<< file << "." << endl;
+		char *argv[MAXNO];
+		strtoargv(command, argv);
+		pid_t pid = fork();
+		if(pid == 0)
+		{
+			if(!symbol.empty())
+			{
+				int fd;
+				if(symbol == ">")
+				{
+					fd = open(file, O_WRONLY|O_CREAT, 00644);
+					dup2(fd, 1);
+				}
+				else if(symbol == ">>")
+				{
+					fd = open(file, O_CREAT|O_WRONLY|O_APPEND, 00644);
+					dup2(fd, 1);
+				}
+				//else if(symbol == "<")
+				//{
+				//	fd = open(file, O_RDONLY, 00644);
+				//	dup2(3, 0);
+				//}
+			}
+			execvp(argv[0], argv);
+		}
+		else
+		{
+			int status;
+			waitpid(pid, &status, 0);
+		}
 	}
 	//argv[i-1] = NULL;
 	//for (i = 0; argv[i] != NULL; ++i)
