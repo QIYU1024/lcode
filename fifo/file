@@ -1,0 +1,9 @@
+total 36
+-rwxrwxr-x. 1 qiyu qiyu 8744 Jun  1 17:59 bak1
+-rw-rw-r--. 1 qiyu qiyu  469 Jun  1 17:57 bak1.c
+-rwxrwxr-x. 1 qiyu qiyu 8696 Jun  1 17:59 bak2
+-rw-rw-r--. 1 qiyu qiyu  451 Jun  1 17:59 bak2.c
+-rw-rw-r--. 1 qiyu qiyu    0 Jun  1 18:03 file
+-rw-rw-r--. 1 qiyu qiyu    0 Jun  1 18:02 file.bak
+-rw-rw-r--. 1 qiyu qiyu  116 Jun  1 17:58 Makefile
+prw-r--r--. 1 qiyu qiyu    0 Jun  1 18:01 tp
