@@ -1,6 +1,6 @@
-pipe:pipe.c
+popen:popen.c
 	gcc -o $@ $^
 
 .PHONY:clean
 clean:
-	rm -f pipe
+	rm -f popen file
