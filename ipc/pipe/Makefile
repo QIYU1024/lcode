@@ -1,6 +1,6 @@
-popen:popen.c
+popen_exp:popen_exp.c
 	gcc -o $@ $^
 
 .PHONY:clean
 clean:
-	rm -f popen file
+	rm -f popen_exp
