@@ -1,6 +1,6 @@
-sigsetfunc:sigsetfunc.cc
-	g++ -o $@ $^
-
+volatile_test:volatile_test.cc
+	# g++ -o $@ $^
+	g++ -o $@ $^ -O2
 .PHONY:clean
 clean:
-	rm -f sigsetfunc
+	rm -f volatile_test
