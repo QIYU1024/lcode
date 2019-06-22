@@ -1,0 +1,31 @@
+#include <iostream>
+#include <pthread.h>
+#include <sys/types.h>
+#include <unistd.h>
+using namespace std;
+
+pthread_t tid;
+
+void printids(const char *s)
+{
+    pid_t pid = getpid();
+    pthread_t tid = pthread_self();
+    cout << s << "pid: " << pid << "tid: " << tid << endl;
+}
+
+void *thr_fn(void *arg)
+{
+    printids("new thread: ");
+    return (void *)0;
+}
+
+int main()
+{
+    int err;
+    err = pthread_create(&tid, NULL, thr_fn, NULL);
+    if(err != 0)
+        cout << "pthread_create error" << endl;
+    printids("main thread: ");
+    sleep(1);
+    return 0;
+}
