@@ -1,5 +1,5 @@
-print_thread_id:print_thread_id.cc
+thread_exit:thread_exit.cc
 	g++ -o $@ $^ -lpthread
 .PHONY:clean
 clean:
-	rm -f print_thread_id
+	rm -f thread_exit
