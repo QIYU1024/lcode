@@ -1,5 +1,5 @@
-thread_exit:thread_exit.cc
+mutex_test:mutex_test.cc
 	g++ -o $@ $^ -lpthread
 .PHONY:clean
 clean:
-	rm -f thread_exit
+	rm -f mutex_test
