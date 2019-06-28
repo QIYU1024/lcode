@@ -1,4 +1,4 @@
-a.out:thread_detach.cc
+a.out:cond_var.cc
 	g++ $^ -lpthread
 .PHONY:clean
 clean:
