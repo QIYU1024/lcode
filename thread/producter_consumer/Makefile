@@ -2,4 +2,4 @@ a.out:pc.cc pc.hpp
 	g++ $^ -lpthread
 .PHONY:clean
 clean:
-	rm -f a.out
+	rm -f a.out pc.hpp.gch
