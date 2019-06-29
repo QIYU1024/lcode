@@ -1,4 +1,4 @@
-a.out:cond_var.cc
+a.out:prod_cons.cc
 	g++ $^ -lpthread
 .PHONY:clean
 clean:
