@@ -30,10 +30,10 @@ public:
 class ThreadPool
 {
 private:
-    queue<Task> task_queue;
+    queue<Task> task_queue; //任务队列
     size_t thread_count;
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
+    pthread_mutex_t mutex; //对任务队列的操作需保证线程安全
+    pthread_cond_t cond; //任务队列为空时阻塞线程，加入新任务时唤醒线程。
 private:
     void LockQueue()
     {
@@ -95,7 +95,7 @@ public:
         LockQueue();
         task_queue.push(t);
         UnLockQueue();
-        SignalThread();
+        SignalThread(); //当有新任务时，唤醒可能被阻塞的线程
     }
     ~ThreadPool()
     {
@@ -114,8 +114,8 @@ public:
     {
         if(tp == NULL)
         {
-            pthread_mutex_lock(&mutex); //为null时再加锁，避免当已经存在对象是仍需要等待获得锁
-            if(tp == NULL) //再次判断可避免在第一次判断和获得锁之间，有其他线程先一步为单例获得对象
+            pthread_mutex_lock(&mutex); //为null时再加锁，避免当已经存在对象时仍需要等待获得锁
+            if(tp == NULL) //再次判断可避免在第一次判断和获得锁之间，有其他线程先一步为单例获得对象，而导致非单例
             {
                 tp = new ThreadPool(5);
                 tp->InitThreadPool();
