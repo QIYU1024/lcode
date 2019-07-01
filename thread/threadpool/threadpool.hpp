@@ -64,7 +64,7 @@ public:
     {}
     static void *run_func(void *arg) //static函数没有参数this
     {
-        ThreadPool *tp = (ThreadPool *)arg;
+        ThreadPool *tp = (ThreadPool *)arg; //不能用this指针，使用参数传入一个对象指针，用来访问成员方法
         while(1)
         {
             tp->LockQueue();
@@ -104,17 +104,23 @@ public:
     }
 };
 
-class Singleton
+class Singleton //单例
 {
 private:
     static ThreadPool *tp;
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 public:
     ThreadPool *GetInstance()
     {
         if(tp == NULL)
         {
-            tp = new ThreadPool(5);
-            tp->InitThreadPool();
+            pthread_mutex_lock(&mutex); //为null时再加锁，避免当已经存在对象是仍需要等待获得锁
+            if(tp == NULL) //再次判断可避免在第一次判断和获得锁之间，有其他线程先一步为单例获得对象
+            {
+                tp = new ThreadPool(5);
+                tp->InitThreadPool();
+            }
+            pthread_mutex_unlock(&mutex);
         }
         return tp;
     }
