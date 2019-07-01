@@ -22,7 +22,7 @@ int Div(int x, int y)
 int main()
 {
     srand((unsigned int)time(NULL));
-    hander func_arr[] = {Add, Sub, Mul, Div};
+    hander func_arr[] = {Add, Sub, Mul, Div}; //模拟线程执行的任务
     ThreadPool *tp = Singleton().GetInstance();
     while(1)
     {

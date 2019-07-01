@@ -65,7 +65,7 @@ public:
     static void *run_func(void *arg) //static函数没有参数this
     {
         ThreadPool *tp = (ThreadPool *)arg; //不能用this指针，使用参数传入一个对象指针，用来访问成员方法
-        while(1)
+        while(1) //每个线程往复的拿任务，执行任务
         {
             tp->LockQueue();
             while(tp->task_queue.empty())
