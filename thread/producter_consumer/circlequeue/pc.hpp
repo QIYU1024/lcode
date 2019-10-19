@@ -38,7 +38,7 @@ public:
     void PushData(const int& val)
     {
         sem_wait(&space_sem); //space--,P
-        rq[product_step] = val;
+        rq[product_step] = val; //存在线程不安全问题，有可能多个线程同时进入区间41~43行。
         ++product_step;
         product_step %= cap;
         sem_post(&data_sem); //data++,V
